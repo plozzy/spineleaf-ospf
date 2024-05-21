@@ -1,0 +1,74 @@
+! Command: show running-config
+! device: L1 (vEOS-lab, EOS-4.26.13M)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname L1
+!
+spanning-tree mode mstp
+!
+vlan 1000
+!
+interface Ethernet1
+   description L1 -> S1
+   no switchport
+   ip address 10.1.0.1/30
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet2
+   description L1 -> S2
+   no switchport
+   ip address 10.1.0.5/30
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet3
+   switchport access vlan 1000
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Ethernet9
+!
+interface Ethernet10
+!
+interface Ethernet11
+!
+interface Ethernet12
+!
+interface Loopback0
+   ip address 10.0.0.1/32
+   ip ospf area 0.0.0.0
+!
+interface Management1
+!
+interface Vlan1000
+   description VLAN orange (1000) -> [H1,H2,L3]
+!
+interface Vxlan1
+   vxlan source-interface Loopback0
+   vxlan udp-port 4789
+   vxlan vlan 1000 vni 101000
+   vxlan vlan 1000 flood vtep 10.0.0.3
+!
+ip routing
+!
+router ospf 1
+   router-id 10.0.0.1
+   max-lsa 12000
+!
+end
